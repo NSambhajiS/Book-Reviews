@@ -15,6 +15,17 @@
         <button type="submit">Search</button>
     </form>
 
+    <form id="sortForm">
+        <label for="sort">Sort by:</label>
+        <select id="sort" name="sortBy" onchange="sortBooks()">
+            <option value="created_at-DESC" <% if(sortBy === 'created_at' && order === 'DESC') { %>selected<% } %>>Newest First</option>
+            <option value="created_at-ASC" <% if(sortBy === 'created_at' && order === 'ASC') { %>selected<% } %>>Oldest First</option>
+            <option value="rating-DESC" <% if(sortBy === 'rating' && order === 'DESC') { %>selected<% } %>>Highest Rating</option>
+            <option value="rating-ASC" <% if(sortBy === 'rating' && order === 'ASC') { %>selected<% } %>>Lowest Rating</option>
+        </select>
+    </form>
+
+
     <ul>
         <% books.forEach(book=>{ %>
             <li>
@@ -36,5 +47,12 @@
             </li>
         <% }) %>
     </ul>
+    <script>
+        function sortBooks() {
+            let selectedOption = document.getElementById("sort").value;
+            let [sortBy, order] = selectedOption.split("-");
+            window.location.href = `/?sortBy=${sortBy}&order=${order}`;
+        }
+    </script>
 </body>
 </html>

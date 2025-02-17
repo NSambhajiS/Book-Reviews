@@ -30,15 +30,23 @@ const connectDB = async () => {
 // Call the function to connect
 connectDB();
 
-app.get("/",async (req,res)=>{
-    try{
-        const result=await db.query("SELECT * FROM books");
-        const books=result.rows;
-        res.render("index.ejs",{books:books});
-    }catch(err){
+app.get("/", async (req, res) => {
+    try {
+        let sortBy = req.query.sortBy || "created_at"; // Default: Sort by date
+        let order = req.query.order || "DESC"; // Default: Newest first
+
+        if (sortBy !== "created_at" && sortBy !== "rating") {
+            sortBy = "created_at"; // Prevent invalid sorting
+        }
+
+        const result = await db.query(`SELECT * FROM books ORDER BY ${sortBy} ${order}`);
+        res.render("index.ejs", { books: result.rows, sortBy, order });
+    } catch (err) {
         console.error(err.message);
+        res.status(500).send("Server Error");
     }
-})
+});
+
 
 app.get("/add",async (req,res)=>{
     try{
