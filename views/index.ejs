@@ -15,10 +15,6 @@
         <button type="submit">Search</button>
     </form>
 
-    <!-- Add this at the top or wherever you want on your index.ejs file -->
-    <a href="/add" class="add-book-btn">Add New Book Review</a>
-
-
     <ul>
         <% books.forEach(book=>{ %>
             <li>
@@ -31,7 +27,12 @@
                     <% } %>
                 </p>
                 <p><strong>Book Review: </strong><%= book.review %></p>
+                <br>
                 <a href="/edit/<%= book.id %>">Edit</a>
+                <br><br>
+                <form action="/delete/<%= book.id %>" method="POST" style="display:inline;">
+                    <button type="submit" onclick="return confirm('Are you sure you want to delete this book?');">❌ Delete</button>
+                </form>                
             </li>
         <% }) %>
     </ul>

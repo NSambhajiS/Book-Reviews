@@ -151,7 +151,20 @@ app.post("/update/:id", async (req,res)=>{
     }
 });
 
+app.post("/delete/:id",async (req,res)=>{
+    try{
+        const deleteId=req.params.id;
 
+        await db.query(
+            "DELETE FROM books WHERE ID=$1",
+            [deleteId]
+        )
+
+        res.redirect("/");
+    }catch(err){
+        console.error(err.message);
+    }
+});
 
 app.listen(port,()=>{
     console.log(`Server running on port ${port}.`);
