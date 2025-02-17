@@ -90,9 +90,58 @@ app.get("/search",async (req,res)=>{
     }catch(err){
         console.error(Array.message);
     }
-})
+});
 
+app.get("/edit/:id",async (req,res)=>{
+    try{
+        const bookId=req.params.id;
+        const result=await db.query(
+            "SELECT * FROM books WHERE id=$1",
+            [bookId]
+        );
 
+        if(result.rows.length>0){
+            const book=result.rows[0];
+            res.render("edit.ejs",{book:book});
+        }else{
+            res.status(404).send("Book not found");
+        }
+    }catch(err){
+        console.error(err.message);
+    }
+    
+});
+
+app.post("/update/:id", async (req,res)=>{
+    try{
+        const bookId=req.params.id;
+        const {title,author,rating,review}=req.body;
+        const currentTime = new Date(); // Get the current timestamp
+
+        //fetch cover URL from open library API
+        const openLibResponse = await axios.get(
+            `https://openlibrary.org/search.json?title=${title}&author=${author}`
+        );
+
+        let cover_url=null;
+        let openlib_id=null;
+
+        if(openLibResponse.data.docs.length>0){
+            openlib_id=openLibResponse.data.docs[0].cover_edition_key;
+            if(openlib_id){
+                cover_url=`https://covers.openlibrary.org/b/olid/${openlib_id}-L.jpg`;
+            }
+        }
+        
+        const result=await db.query(
+            "UPDATE books SET title=$1 , author=$2, rating=$3,review=$4,cover_url=$5, openlib_id=$6, created_at=$7 WHERE id=$8",
+            [title, author, rating, review,cover_url, openlib_id, currentTime, bookId]
+        );
+        res.redirect("/");
+    }catch(err){
+        console.error(err.message);
+    }
+});
 
 app.listen(port,()=>{
     console.log(`Server running on port ${port}.`);
