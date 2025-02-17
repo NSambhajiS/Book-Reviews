@@ -40,6 +40,14 @@ app.get("/",async (req,res)=>{
     }
 })
 
+app.get("/add",async (req,res)=>{
+    try{
+        res.render("add.ejs");
+    }catch(err){
+        console.error(err.message);
+    }
+});
+
 app.post("/add",async (req,res)=>{
     //title,author,revew,rating
     const title=req.body.newTitle;
@@ -142,6 +150,8 @@ app.post("/update/:id", async (req,res)=>{
         console.error(err.message);
     }
 });
+
+
 
 app.listen(port,()=>{
     console.log(`Server running on port ${port}.`);
