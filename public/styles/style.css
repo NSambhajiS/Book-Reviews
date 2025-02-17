@@ -41,3 +41,19 @@ p {
     color: gold;
     font-size: 18px;
 }
+form {
+    margin-bottom: 20px;
+}
+
+input {
+    padding: 8px;
+    width: 250px;
+}
+
+button {
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}

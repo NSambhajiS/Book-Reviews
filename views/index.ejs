@@ -9,6 +9,12 @@
 <body>
     <h1>My Book Notes</h1>
 
+    <!--Search bar-->
+    <form action="/search" method="get">
+        <input type="text" name="query" placeholder="Search for a book...." required>
+        <button type="submit">Search</button>
+    </form>
+
     <ul>
         <% books.forEach(book=>{ %>
             <li>

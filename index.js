@@ -75,7 +75,22 @@ app.post("/add",async (req,res)=>{
     }
 });
 
+app.get("/search",async (req,res)=>{
+    try{
+        const query=req.query.query;
+        const result=await db.query(
+            "SELECT * FROM books WHERE title ILIKE $1",
+            [`%${query}%`]
+        );
+        // If no books are found, pass an empty array
+        const books = result.rows.length > 0 ? result.rows : [];  
+        console.log(result.rows);  // Log to check what the database returns
 
+        res.render("index.ejs", { books });  // Pass books to EJS
+    }catch(err){
+        console.error(Array.message);
+    }
+})
 
 
 
